@@ -1,8 +1,11 @@
 package com.oceanpay.enums;
 
+import lombok.Getter;
+
 /**
  * 登录类型枚举
  */
+@Getter
 public enum LoginType {
     PASSWORD(1, "密码登录"),
     VERIFICATION_CODE(2, "验证码登录"),
@@ -14,14 +17,6 @@ public enum LoginType {
     LoginType(int code, String description) {
         this.code = code;
         this.description = description;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public static LoginType fromCode(int code) {

@@ -1,16 +1,18 @@
 package com.oceanpay.filter;
 
 import com.oceanpay.exception.BusinessException;
-import com.oceanpay.exception.ErrorCode;
 import com.oceanpay.service.AuthService;
 import com.oceanpay.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * JWT认证过滤器
@@ -32,8 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         
         final String authHeader = request.getHeader("Authorization");
         
@@ -86,10 +90,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * 创建UserDetails对象
      */
     private UserDetails createUserDetails(com.oceanpay.entity.User user) {
+        List<GrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
+        );
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password("") // 密码不需要，因为使用JWT认证
-                .authorities("ROLE_USER") // 默认角色
+                .authorities(authorities) // 默认角色
                 .accountExpired(false)
                 .accountLocked(user.getStatus() != com.oceanpay.enums.UserStatus.ACTIVE)
                 .credentialsExpired(false)

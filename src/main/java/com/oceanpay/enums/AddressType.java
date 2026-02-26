@@ -1,8 +1,11 @@
 package com.oceanpay.enums;
 
+import lombok.Getter;
+
 /**
  * 地址类型枚举
  */
+@Getter
 public enum AddressType {
     SHIPPING(1, "收货地址"),
     INVOICE(2, "发票地址");
@@ -13,14 +16,6 @@ public enum AddressType {
     AddressType(int code, String description) {
         this.code = code;
         this.description = description;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public static AddressType fromCode(int code) {

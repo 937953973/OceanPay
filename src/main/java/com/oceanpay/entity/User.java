@@ -1,5 +1,6 @@
 package com.oceanpay.entity;
 
+import com.oceanpay.enums.UserRole;
 import com.oceanpay.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -51,6 +52,10 @@ public class User {
     @Column(name = "status", nullable = false)
     @Convert(converter = UserStatusConverter.class)
     private UserStatus status;
+
+    @Column(name = "role", nullable = false)
+    @Convert(converter = UserRoleConverter.class)
+    private UserRole role;
     
     @Column(name = "email_verified", nullable = false)
     private Boolean emailVerified;
@@ -80,6 +85,9 @@ public class User {
         if (phoneVerified == null) {
             phoneVerified = false;
         }
+        if (role == null) {
+            role = UserRole.CONSUMER;
+        }
     }
     
     @PreUpdate
@@ -100,6 +108,19 @@ public class User {
         @Override
         public UserStatus convertToEntityAttribute(Integer code) {
             return code != null ? UserStatus.fromCode(code) : null;
+        }
+    }
+
+    @Converter(autoApply = true)
+    public static class UserRoleConverter implements AttributeConverter<UserRole, Integer> {
+        @Override
+        public Integer convertToDatabaseColumn(UserRole role) {
+            return role != null ? role.getCode() : null;
+        }
+
+        @Override
+        public UserRole convertToEntityAttribute(Integer code) {
+            return code != null ? UserRole.fromCode(code) : null;
         }
     }
 }

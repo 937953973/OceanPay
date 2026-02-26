@@ -1,8 +1,11 @@
 package com.oceanpay.enums;
 
+import lombok.Getter;
+
 /**
  * 验证码类型枚举
  */
+@Getter
 public enum VerificationCodeType {
     REGISTER(1, "注册"),
     LOGIN(2, "登录"),
@@ -16,14 +19,6 @@ public enum VerificationCodeType {
     VerificationCodeType(int code, String description) {
         this.code = code;
         this.description = description;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public static VerificationCodeType fromCode(int code) {

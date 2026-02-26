@@ -1,8 +1,11 @@
 package com.oceanpay.enums;
 
+import lombok.Getter;
+
 /**
  * 用户状态枚举
  */
+@Getter
 public enum UserStatus {
     ACTIVE(1, "正常"),
     FROZEN(2, "冻结"),
@@ -14,14 +17,6 @@ public enum UserStatus {
     UserStatus(int code, String description) {
         this.code = code;
         this.description = description;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public static UserStatus fromCode(int code) {

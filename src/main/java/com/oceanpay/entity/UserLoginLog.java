@@ -51,6 +51,9 @@ public class UserLoginLog {
     
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "login_identifier", length = 100)
+    private String loginIdentifier;
     
     @PrePersist
     protected void onCreate() {

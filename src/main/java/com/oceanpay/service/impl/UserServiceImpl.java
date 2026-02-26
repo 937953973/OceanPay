@@ -2,6 +2,7 @@ package com.oceanpay.service.impl;
 
 import com.oceanpay.entity.User;
 import com.oceanpay.entity.UserPreference;
+import com.oceanpay.enums.UserRole;
 import com.oceanpay.enums.UserStatus;
 import com.oceanpay.exception.BusinessException;
 import com.oceanpay.exception.ErrorCode;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 /**
  * 用户服务实现类
@@ -27,7 +28,22 @@ public class UserServiceImpl implements UserService {
     
     private final UserRepository userRepository;
     private final UserPreferenceRepository userPreferenceRepository;
-    
+
+    @Override
+    public List<User> getAllUsers() {
+        log.debug("获取所有用户");
+        return userRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public void updateUserRole(Long userId, UserRole role) {
+        log.info("更新用户角色: userId={}, role={}", userId, role);
+        User user = getUserById(userId);
+        user.setRole(role);
+        userRepository.save(user);
+    }
+
     @Override
     public User getUserById(Long userId) {
         log.debug("根据ID获取用户: userId={}", userId);

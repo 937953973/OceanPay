@@ -61,9 +61,13 @@ public class SecurityConfig {
                     ).permitAll()
                     
                     // 需要认证的端点
-                    .requestMatchers(
-                            "/api/user/**"
-                    ).authenticated()
+                    .requestMatchers("/api/user/**").authenticated()
+
+                    // 管理员接口示例（需要 ADMIN 角色）
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                    // 商家接口示例
+                    .requestMatchers("/api/merchant/**").hasRole("MERCHANT")
                     
                     // 其他所有请求都需要认证
                     .anyRequest().authenticated()

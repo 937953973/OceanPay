@@ -28,6 +28,7 @@ public class LoginResponse {
     /**
      * 令牌类型
      */
+    @Builder.Default
     private String tokenType = "Bearer";
     
     /**

@@ -36,11 +36,11 @@ public class JwtUtil {
         SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuer(issuer)
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .claims(claims)               // 替换 setClaims
+                .issuer(issuer)                // 替换 setIssuer
+                .issuedAt(now)                 // 替换 setIssuedAt
+                .expiration(expiration)        // 替换 setExpiration
+                .signWith(key)                 // 算法从 key 推断（HS256）
                 .compact();
     }
 

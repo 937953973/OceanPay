@@ -2,16 +2,10 @@ package com.oceanpay.service.impl;
 
 import com.oceanpay.entity.User;
 import com.oceanpay.entity.UserLoginLog;
-import com.oceanpay.entity.VerificationCode;
-import com.oceanpay.enums.LoginStatus;
-import com.oceanpay.enums.LoginType;
-import com.oceanpay.enums.UserStatus;
-import com.oceanpay.enums.VerificationCodeType;
+import com.oceanpay.enums.*;
 import com.oceanpay.exception.BusinessException;
 import com.oceanpay.exception.ErrorCode;
 import com.oceanpay.repository.UserLoginLogRepository;
-import com.oceanpay.repository.UserRepository;
-import com.oceanpay.repository.VerificationCodeRepository;
 import com.oceanpay.service.AuthService;
 import com.oceanpay.service.UserService;
 import com.oceanpay.service.VerificationCodeService;
@@ -23,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,11 +27,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthServiceImpl implements AuthService {
-    
-    private final UserRepository userRepository;
+
     private final UserService userService;
     private final VerificationCodeService verificationCodeService;
-    private final VerificationCodeRepository verificationCodeRepository;
     private final UserLoginLogRepository userLoginLogRepository;
     private final JwtUtil jwtUtil;
     
@@ -172,7 +163,7 @@ public class AuthServiceImpl implements AuthService {
         }
         
         String target = (String) claims.get("target");
-        String code = (String) claims.get("code");
+//        String code = (String) claims.get("code");
         
         // 验证目标与用户信息匹配
         if (!target.equals(user.getEmail()) && !target.equals(user.getPhone())) {
@@ -199,6 +190,7 @@ public class AuthServiceImpl implements AuthService {
         
         // 设置默认值
         user.setStatus(UserStatus.ACTIVE);
+        user.setRole(UserRole.CONSUMER);
         user.setEmailVerified(false);
         user.setPhoneVerified(false);
         
@@ -323,6 +315,7 @@ public class AuthServiceImpl implements AuthService {
         claims.put("userId", user.getId());
         claims.put("username", user.getUsername());
         claims.put("email", user.getEmail());
+        claims.put("role", user.getRole().name());
         claims.put("type", "ACCESS");
         
         return jwtUtil.generateToken(claims, 3600); // 1小时有效期
@@ -333,6 +326,7 @@ public class AuthServiceImpl implements AuthService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("type", "REFRESH");
+        claims.put("role", user.getRole().name());
         
         return jwtUtil.generateToken(claims, 604800); // 7天有效期
     }
@@ -353,6 +347,7 @@ public class AuthServiceImpl implements AuthService {
                                 String ipAddress, String userAgent, String failureReason) {
         UserLoginLog log = UserLoginLog.builder()
                 .user(userId != null ? User.builder().id(userId).build() : null)
+                .loginIdentifier(identifier)
                 .loginType(loginType)
                 .ipAddress(ipAddress)
                 .userAgent(userAgent)

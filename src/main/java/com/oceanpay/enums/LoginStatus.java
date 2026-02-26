@@ -1,8 +1,11 @@
 package com.oceanpay.enums;
 
+import lombok.Getter;
+
 /**
  * 登录状态枚举
  */
+@Getter
 public enum LoginStatus {
     SUCCESS(1, "成功"),
     FAILED(2, "失败");
@@ -13,14 +16,6 @@ public enum LoginStatus {
     LoginStatus(int code, String description) {
         this.code = code;
         this.description = description;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public static LoginStatus fromCode(int code) {

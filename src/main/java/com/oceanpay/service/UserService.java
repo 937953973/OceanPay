@@ -1,12 +1,25 @@
 package com.oceanpay.service;
 
 import com.oceanpay.entity.User;
+import com.oceanpay.enums.UserRole;
+
+import java.util.List;
 
 /**
  * 用户服务接口
  */
 public interface UserService {
-    
+
+    /**
+     * 获取所有用户（管理员用）
+     */
+    List<User> getAllUsers();
+
+    /**
+     * 更新用户角色（管理员用）
+     */
+    void updateUserRole(Long userId, UserRole role);
+
     /**
      * 根据ID获取用户
      */
