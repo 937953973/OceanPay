@@ -1,0 +1,19 @@
+tree /F > project_tree.txt
+
+$output = "project_code_all.txt"
+"" | Out-File -FilePath $output -Encoding UTF8
+
+# 添加目录树（假设你已经生成了 tree.txt）
+if (Test-Path "tree.txt") {
+    Get-Content "tree.txt" | Out-File -FilePath $output -Append -Encoding UTF8
+}
+
+$extensions = @("*.java", "*.xml", "*.properties", "*.yml", "*.md")
+foreach ($ext in $extensions) {
+    Get-ChildItem -Recurse -File -Filter $ext | ForEach-Object {
+        $relativePath = Resolve-Path -Path $_.FullName -Relative
+        "`n`n===== File: $relativePath =====" | Out-File -FilePath $output -Append -Encoding UTF8
+        # 关键修改：读取文件时指定 UTF8 编码
+        Get-Content -Path $_.FullName -Encoding UTF8 | Out-File -FilePath $output -Append -Encoding UTF8
+    }
+}
