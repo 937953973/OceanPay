@@ -1,0 +1,31 @@
+# Server Configuration
+server.port=8080
+server.servlet.context-path=/
+
+# Application Configuration
+spring.application.name=OceanPay
+
+# Logging Configuration
+logging.level.com.oceanpay=DEBUG
+logging.level.org.springframework.web=INFO
+logging.level.org.hibernate=INFO
+
+# Spring Boot Actuator (optional, can be enabled later)
+# management.endpoints.web.exposure.include=health,info,metrics
+# management.endpoint.health.show-details=always
+
+# Development Tools
+spring.devtools.restart.enabled=true
+spring.devtools.livereload.enabled=true
+
+# HTTP Configuration
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
+
+# Date/Time Configuration
+spring.jackson.time-zone=UTC
+spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+
+# Security (to be configured later)
+# spring.security.user.name=admin
+# spring.security.user.password=admin

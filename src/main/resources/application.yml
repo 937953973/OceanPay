@@ -1,0 +1,137 @@
+# Spring Boot 配置
+spring:
+  application:
+    name: OceanPay
+  
+  # 数据源配置
+  datasource:
+    url: jdbc:h2:mem:oceanpaydb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  # H2 控制台配置
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  # JPA 配置
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+  
+  # SQL 初始化
+  sql:
+    init:
+      mode: never
+#      schema-locations: classpath:schema.sql
+#      data-locations: classpath:data.sql
+  
+  # Jackson 配置
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC
+  
+  # 邮件配置（示例）
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# JWT 配置
+jwt:
+  secret: oceanpay-secret-key-2025-spring-boot-jwt-security
+  issuer: OceanPay
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  
+  # 错误页面配置
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: false
+
+# 日志配置
+logging:
+  level:
+    com.oceanpay: DEBUG
+    org.springframework.boot.autoconfigure: DEBUG
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  
+  file:
+    name: logs/oceanpay.log
+  
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+
+# 验证码配置
+verification:
+  code:
+    length: 6
+    expire-minutes: 5
+    send-frequency-seconds: 60
+    max-attempts: 5
+    attempt-window-minutes: 5
+
+# 安全配置
+security:
+  cors:
+    allowed-origins: "*"
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: "*"
+    max-age: 3600
+
+# 应用配置
+app:
+  name: OceanPay Payment System
+  version: 1.0.0
+  description: A payment processing system
+  environment: development
+  
+  # API 文档配置
+  api-docs:
+    enabled: true
+    title: OceanPay API Documentation
+    description: REST API documentation for OceanPay Payment System
+    version: 1.0.0
+    contact:
+      name: OceanPay Team
+      email: support@oceanpay.com
+      url: https://oceanpay.com
+  
+  # 默认配置
+  defaults:
+    currency: USD
+    language: en
+    timezone: UTC
